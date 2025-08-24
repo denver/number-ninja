@@ -1,15 +1,45 @@
 import { QuizCard } from './types'
 
-export const generateQuizCards = (base: number, cardCount: number = 10): QuizCard[] => {
+export const generateQuizCards = (maxFactor: number, cardCount: number = 10): QuizCard[] => {
   const cards: QuizCard[] = []
+  const usedPairs = new Set<string>()
   
-  for (let i = 0; i < cardCount; i++) {
-    const factor2 = Math.floor(Math.random() * 13) // 0-12
+  let attempts = 0
+  const maxAttempts = cardCount * 10 // Prevent infinite loops
+  
+  while (cards.length < cardCount && attempts < maxAttempts) {
+    attempts++
+    
+    const factor1 = Math.floor(Math.random() * maxFactor) + 1 // 1 to maxFactor
+    const factor2 = Math.floor(Math.random() * maxFactor) + 1 // 1 to maxFactor
+    
+    // Create a normalized key (smaller factor first) to avoid duplicates like "3x4" and "4x3"
+    const normalizedKey = factor1 <= factor2 ? `${factor1}x${factor2}` : `${factor2}x${factor1}`
+    
+    if (!usedPairs.has(normalizedKey)) {
+      usedPairs.add(normalizedKey)
+      cards.push({
+        id: cards.length,
+        factor1,
+        factor2,
+        correctAnswer: factor1 * factor2,
+        userAnswer: null,
+        startTime: Date.now(),
+        endTime: null,
+        isCorrect: null
+      })
+    }
+  }
+  
+  // If we couldn't generate enough unique pairs, fill remaining with random ones
+  while (cards.length < cardCount) {
+    const factor1 = Math.floor(Math.random() * maxFactor) + 1
+    const factor2 = Math.floor(Math.random() * maxFactor) + 1
     cards.push({
-      id: i,
-      factor1: base,
+      id: cards.length,
+      factor1,
       factor2,
-      correctAnswer: base * factor2,
+      correctAnswer: factor1 * factor2,
       userAnswer: null,
       startTime: Date.now(),
       endTime: null,
@@ -38,4 +68,14 @@ export const getStoredBase = (): number => {
 export const setStoredBase = (base: number): void => {
   if (typeof window === 'undefined') return
   localStorage.setItem('numberNinjaBase', base.toString())
+}
+
+export const getStoredQuestionCount = (): number => {
+  if (typeof window === 'undefined') return 10
+  return parseInt(localStorage.getItem('numberNinjaQuestionCount') || '10')
+}
+
+export const setStoredQuestionCount = (count: number): void => {
+  if (typeof window === 'undefined') return
+  localStorage.setItem('numberNinjaQuestionCount', count.toString())
 }

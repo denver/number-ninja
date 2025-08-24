@@ -2,15 +2,19 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { getStoredBase, setStoredBase } from './utils'
+import { getStoredBase, setStoredBase, getStoredQuestionCount, setStoredQuestionCount } from './utils'
 
 export default function Home() {
   const [base, setBase] = useState(9)
   const [showBasePicker, setShowBasePicker] = useState(false)
   const [customBase, setCustomBase] = useState('')
+  const [questionCount, setQuestionCount] = useState(10)
+  const [showQuestionPicker, setShowQuestionPicker] = useState(false)
+  const [customQuestionCount, setCustomQuestionCount] = useState('')
 
   useEffect(() => {
     setBase(getStoredBase())
+    setQuestionCount(getStoredQuestionCount())
   }, [])
 
   const handleBaseChange = (newBase: number) => {
@@ -27,6 +31,23 @@ export default function Home() {
     const newBase = parseInt(customBase)
     if (!isNaN(newBase)) {
       handleBaseChange(newBase)
+    }
+  }
+
+  const handleQuestionCountChange = (newCount: number) => {
+    if (newCount >= 1 && newCount <= 1000) {
+      setQuestionCount(newCount)
+      setStoredQuestionCount(newCount)
+      setShowQuestionPicker(false)
+      setCustomQuestionCount('')
+    }
+  }
+
+  const handleCustomQuestionCountSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const newCount = parseInt(customQuestionCount)
+    if (!isNaN(newCount)) {
+      handleQuestionCountChange(newCount)
     }
   }
 
@@ -50,7 +71,7 @@ export default function Home() {
           <div className="mb-8">
             <div className="flex items-center justify-center gap-3 mb-4">
               <span className="text-lg text-gray-700">
-                Practicing multiplication table:
+                Maximum factor:
               </span>
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-bold text-blue-600">
@@ -59,7 +80,7 @@ export default function Home() {
                 <button
                   onClick={() => setShowBasePicker(!showBasePicker)}
                   className="text-gray-500 hover:text-gray-700 text-xl"
-                  aria-label="Change base number"
+                  aria-label="Change maximum factor"
                 >
                   ⚙️
                 </button>
@@ -104,8 +125,64 @@ export default function Home() {
               </div>
             )}
 
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-lg text-gray-700">
+                Question count:
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold text-green-600">
+                  {questionCount}
+                </span>
+                <button
+                  onClick={() => setShowQuestionPicker(!showQuestionPicker)}
+                  className="text-gray-500 hover:text-gray-700 text-xl"
+                  aria-label="Change question count"
+                >
+                  ⚙️
+                </button>
+              </div>
+            </div>
+
+            {showQuestionPicker && (
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <p className="text-sm text-gray-600 mb-3">Choose question count:</p>
+                <div className="grid grid-cols-4 gap-2 mb-4">
+                  {[5, 10, 15, 20, 25, 30, 50, 100].map((count) => (
+                    <button
+                      key={count}
+                      onClick={() => handleQuestionCountChange(count)}
+                      className={`py-2 px-3 rounded text-sm font-medium transition-colors ${
+                        questionCount === count
+                          ? 'bg-green-600 text-white'
+                          : 'bg-white text-gray-700 hover:bg-green-100 border'
+                      }`}
+                    >
+                      {count}
+                    </button>
+                  ))}
+                </div>
+                <form onSubmit={handleCustomQuestionCountSubmit} className="flex gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    max="1000"
+                    value={customQuestionCount}
+                    onChange={(e) => setCustomQuestionCount(e.target.value)}
+                    placeholder="Custom count"
+                    className="flex-1 px-3 py-2 border rounded text-sm"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-green-600 text-white rounded text-sm font-medium hover:bg-green-700"
+                  >
+                    Set
+                  </button>
+                </form>
+              </div>
+            )}
+
             <p className="text-gray-600">
-              You&apos;ll practice 10 multiplication problems with the number {base}.
+              You&apos;ll practice {questionCount} multiplication problems where both factors are 1-{base}.
             </p>
           </div>
 

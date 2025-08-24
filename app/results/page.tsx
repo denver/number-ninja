@@ -60,7 +60,7 @@ export default function ResultsPage() {
               {correctCount}/{quizResults.cards.length} Correct
             </h2>
             <p className="text-xl text-gray-600">
-              {scorePercentage}% accuracy with table {quizResults.base}
+              {scorePercentage}% accuracy with factors up to {quizResults.base}
             </p>
           </div>
 

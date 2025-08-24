@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuizState, QuizCard } from '../types'
-import { generateQuizCards, getStoredBase } from '../utils'
+import { generateQuizCards, getStoredBase, getStoredQuestionCount } from '../utils'
 
 export default function QuizPage() {
   const router = useRouter()
@@ -18,7 +18,8 @@ export default function QuizPage() {
 
   useEffect(() => {
     const base = getStoredBase()
-    const cards = generateQuizCards(base)
+    const questionCount = getStoredQuestionCount()
+    const cards = generateQuizCards(base, questionCount)
     setQuizState({
       base,
       cards,
@@ -94,6 +95,19 @@ export default function QuizPage() {
     handleSubmit(null)
   }
 
+  const handleEndTraining = () => {
+    if (!quizState) return
+    
+    const now = Date.now()
+    const finalQuizState: QuizState = {
+      ...quizState,
+      endTime: now,
+      isCompleted: true
+    }
+    localStorage.setItem('quizResults', JSON.stringify(finalQuizState))
+    router.push('/results')
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !feedback.show) {
       e.preventDefault()
@@ -155,22 +169,31 @@ export default function QuizPage() {
                 />
               </div>
 
-              <div className="flex gap-4 justify-center">
+              <div className="flex gap-3 justify-center mb-6">
                 <button
                   onClick={() => handleSubmit()}
-                  className="bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition-colors"
+                  className="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg hover:bg-blue-700 transition-colors"
                 >
                   Submit
                 </button>
                 <button
                   onClick={handleSkip}
-                  className="bg-gray-300 text-gray-700 font-semibold py-3 px-8 rounded-lg text-lg hover:bg-gray-400 transition-colors"
+                  className="bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg text-lg hover:bg-gray-400 transition-colors"
                 >
                   Skip
                 </button>
               </div>
 
-              <p className="text-sm text-gray-500 mt-4">
+              <div className="text-center">
+                <button
+                  onClick={handleEndTraining}
+                  className="text-red-600 hover:text-red-700 text-sm font-medium underline"
+                >
+                  End Training
+                </button>
+              </div>
+
+              <p className="text-sm text-gray-500 mt-3">
                 Press Enter to submit your answer
               </p>
             </>
