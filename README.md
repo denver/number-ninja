@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🥷 Number Ninja
 
-## Getting Started
+**Sharpen your math skills, one slash at a time.**
 
-First, run the development server:
+A fun, kid-friendly multiplication practice app built with Next.js. Choose your multiplication table, train through 10 problems, and track your progress!
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/number-ninja)
+
+## ✨ Features
+
+- **📊 Customizable Base Numbers**: Practice any multiplication table (1-99+)
+- **⏱️ Time Tracking**: Monitor your speed and accuracy
+- **🎯 Interactive Quiz**: Card-by-card format with instant feedback
+- **📱 Mobile-Friendly**: Works great on all devices
+- **💾 Local Storage**: Remembers your preferred base number
+- **🎨 Clean UI**: Built with Tailwind CSS for a polished look
+- **🚀 Zero Config**: No backend required, deploys instantly to Vercel
+
+## 🚀 Quick Start
+
+### Development
 
 ```bash
+# Clone and install
+git clone <your-repo-url>
+cd number-ninja
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) to start training!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Build for production
+npm run build
+npm start
+```
 
-## Learn More
+## 🎮 How to Play
 
-To learn more about Next.js, take a look at the following resources:
+1. **Choose Your Base**: Select a multiplication table (default: 9) using the ⚙️ gear icon
+2. **Start Training**: Click "Start Training 🥷" to begin your 10-card quiz
+3. **Answer Questions**: Type your answer and press Enter (or click Submit)
+4. **Track Progress**: See your results with timing and accuracy breakdown
+5. **Train Again**: Keep practicing to improve your ninja skills!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Deployment**: Vercel (zero config)
+- **State Management**: Client-side React state + localStorage
 
-## Deploy on Vercel
+## 📁 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+number-ninja/
+├── app/
+│   ├── page.tsx          # Home/setup page
+│   ├── quiz/page.tsx     # Quiz interface
+│   ├── results/page.tsx  # Results breakdown
+│   ├── types.ts          # TypeScript definitions
+│   ├── utils.ts          # Utility functions
+│   └── globals.css       # Global styles
+├── public/               # Static assets
+└── README.md
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎯 Key Features Implementation
+
+- **Base Selection**: Supports 1-20 quick selection + custom input for higher numbers
+- **Quiz Logic**: Generates random factors (0-12) for chosen multiplication table
+- **Timing System**: Tracks time per card and total quiz time
+- **Progress Tracking**: Visual progress bar and card counter
+- **Results Analysis**: Shows correct/incorrect breakdown with timing details
+- **Accessibility**: Keyboard navigation (Enter to submit), proper ARIA labels
+- **Responsive Design**: Works on desktop and mobile devices
+
+## 🚀 Deploy to Vercel
+
+The fastest way to deploy Number Ninja is using the Vercel Platform:
+
+1. Click the "Deploy with Vercel" button above, or
+2. Push your code to GitHub and import it in Vercel, or  
+3. Use the Vercel CLI: `vercel --prod`
+
+No environment variables or configuration needed - it just works!
+
+## 📝 License
+
+MIT License - feel free to fork and customize for your own ninja training dojo!
